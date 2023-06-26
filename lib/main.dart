@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,34 @@ class MyApp extends StatelessWidget {
       // ),
       // home: const SigninScreen(),
       // home: const SignupScreen(),
-      home: MobileScreenLayout(),
+      // home: MobileScreenLayout(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            print('masuk');
+            if (snapshot.hasData) {
+              print('masuk2');
+              return const ResponsiveLayout(
+                mobileScreenLayout: MobileScreenLayout(),
+                webScreenLayout: WebScreenLayout(),
+              );
+            } else if (snapshot.hasError) {
+              print('masuk3');
+              return const Center(child: Text('{snapshot.error}'));
+            }
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print('masuk4');
+            return const Center(
+                child: CircularProgressIndicator(
+              color: primaryColor,
+            ));
+          }
+          print('masuk5');
+          return const SigninScreen();
+        },
+      ),
     );
   }
 }
