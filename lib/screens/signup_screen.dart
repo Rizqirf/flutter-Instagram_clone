@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/screens/signin_screen.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import '../utils/colors.dart';
+
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passController.dispose();
+    _usernameController.dispose();
   }
 
   @override
@@ -26,14 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
+                flex: 1,
                 child: Container(),
-                flex: 2,
               ),
               SvgPicture.asset(
                 'assets/ic_instagram.svg',
@@ -42,6 +46,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(
                 height: 64,
+              ),
+              TextFieldInput(
+                textEditingController: _usernameController,
+                textInputType: TextInputType.text,
+                hintText: 'Enter your username',
+                isPass: false,
+              ),
+              const SizedBox(
+                height: 24,
               ),
               TextFieldInput(
                 textEditingController: _emailController,
@@ -62,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24,
               ),
               Container(
-                child: const Text('Log In'),
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -73,30 +85,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     color: blueColor),
+                child: const Text('Sign Up'),
               ),
               const SizedBox(
                 height: 12,
               ),
               Flexible(
+                flex: 1,
                 child: Container(),
-                flex: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    child: const Text("Don't have an account?"),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                  ),
-                  Container(
-                    child: const Text(
-                      "Sign up",
-                      style: TextStyle(
+                  const Text("Already have an account?"),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: primaryColor,
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                  )
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SigninScreen()));
+                    },
+                    child: const Text("Sign in"),
+                  ),
                 ],
               )
             ],
